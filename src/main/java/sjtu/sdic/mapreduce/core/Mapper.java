@@ -84,7 +84,6 @@ public class Mapper {
 
         for(KeyValue keyValue : keyValueList){
             int hashCode = Mapper.hashCode(keyValue.key) % nReduce;
-//            String interFileName = reducerFileNames.elementAt(hashCode);
             String interFileName = reducerFileNames.get(hashCode);
             if(fileOfKeyValueMap.get(interFileName) == null)
                 fileOfKeyValueMap.put(interFileName, new LinkedList<>());
@@ -93,13 +92,8 @@ public class Mapper {
 
         for(String fileName : reducerFileNames){
             if(fileOfKeyValueMap.get(fileName) != null && fileOfKeyValueMap.get(fileName).size() != 0){
-                System.out.println("before size " + fileOfKeyValueMap.get(fileName));
                 String keyValueArrayString = JSONArray.toJSONString(fileOfKeyValueMap.get(fileName));
                 writeFile(fileName, keyValueArrayString);
-                System.out.println("write to doMap File " + fileName);
-                System.out.println("the file to doMap content size is  " + keyValueArrayString.length());
-                List<KeyValue> tet = JSONArray.parseArray(keyValueArrayString, KeyValue.class);
-                System.out.println("the tet size " + tet.size());
             }
         }
     }

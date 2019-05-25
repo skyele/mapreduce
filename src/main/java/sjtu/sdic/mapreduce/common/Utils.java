@@ -1,7 +1,13 @@
 package sjtu.sdic.mapreduce.common;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.parser.Feature;
+
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Cachhe on 2019/4/19.
@@ -39,15 +45,49 @@ public class Utils {
     }
 
     public static String readFile(String fileName) throws IOException {
-        return new String(Files.readAllBytes(new File(fileName).toPath()));
+        return new String(Files.readAllBytes(new File(fileName).toPath()), StandardCharsets.UTF_8);
     }
 
     public static void writeFile(String fileName, String content) throws IOException {
-        FileOutputStream fos = new FileOutputStream(fileName, true);
+        FileOutputStream fos = new FileOutputStream(fileName);
         OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
         osw.write(content);
         osw.flush();
-        osw.close();
-        fos.close();
     }
 }
+
+
+
+//        try
+//        {
+//            String encoding = "UTF-8";
+//            File file = new File(fileName);
+//            if (file.isFile() && file.exists())
+//            { // 判断文件是否存在
+//                InputStreamReader read = new InputStreamReader(
+//                        new FileInputStream(file), encoding);// 考虑到编码格式
+//                BufferedReader bufferedReader = new BufferedReader(read);
+//                StringBuffer buffer = new StringBuffer();
+//                String lineTxt = null;
+//
+//                while ((lineTxt = bufferedReader.readLine()) != null)
+//                {
+//                    buffer.append(lineTxt);
+//                    buffer.append("\n");
+//                }
+//                bufferedReader.close();
+//                read.close();
+//                return buffer.toString();
+//            }
+//            else
+//            {
+//                System.out.println("找不到指定的文件");
+//                throw new IOException("找不到指定的文件");
+//            }
+//        }
+//        catch (Exception e)
+//        {
+//            System.out.println("读取文件内容出错");
+//            e.printStackTrace();
+//        }
+//        return "";

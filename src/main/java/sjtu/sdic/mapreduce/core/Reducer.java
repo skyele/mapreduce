@@ -4,12 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import sjtu.sdic.mapreduce.common.KeyValue;
 import sjtu.sdic.mapreduce.common.Utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
@@ -58,14 +60,10 @@ public class Reducer {
      * @param reduceF user-defined reduce function
      */
     public static void doReduce(String jobName, int reduceTask, String outFile, int nMap, ReduceFunc reduceF) throws IOException {
-        System.out.println("in doReduce");
         Map<String, List<String>> keyValueMap = new HashMap<>();
         for(int i = 0; i < nMap; i++){
             String fileName = Utils.reduceName(jobName, i, reduceTask);
-            System.out.println("the file name " + fileName);
             String content = Utils.readFile(fileName);
-            System.out.println("the first content is " + content.substring(0, 100));
-            System.out.println("the last content is " + content.substring(content.length() - 100));
             List<KeyValue> keyValueList = JSONArray.parseArray(content, KeyValue.class);
             for(KeyValue keyValue : keyValueList){
                 if(keyValueMap.get(keyValue.key) == null)
@@ -76,27 +74,21 @@ public class Reducer {
         List<String> keys = new ArrayList<String>(keyValueMap.keySet());
         List<KeyValue> resList = new LinkedList<>();
         Collections.sort(keys);
-
         for(String s : keys){
             String[] stringArray = Arrays.copyOf(keyValueMap.get(s).toArray(), keyValueMap.get(s).toArray().length, String[].class);
             String res = reduceF.reduce(s, stringArray);
             resList.add(new KeyValue(s, res));
         }
-
         String contentToFile = "{";
         int count = 0;
         for(KeyValue keyValue : resList){
-                String tmp = "\"" + keyValue.key + "\" : \"" + keyValue.value + "\"";
-                if(count == resList.size() - 1)
-                    tmp += ", ";
-                contentToFile += tmp;
-                count ++;
+            String tmp = "\"" + keyValue.key + "\" : \"" + keyValue.value + "\"";
+            if(count != resList.size() - 1)
+                tmp += ", ";
+            contentToFile += tmp;
+            count ++;
         }
         contentToFile += "}";
-
-        System.out.println("write to doReduce " + outFile);
         Utils.writeFile(outFile, contentToFile);
-        String readc = Utils.readFile(outFile);
-        System.out.println("the read c is " + readc);
     }
 }

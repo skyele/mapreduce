@@ -368,7 +368,7 @@ public class Master implements MasterRpcService {
             try {
                 // only suitable for small files
                 System.out.println( (new File(p).toPath()) + " hello from the outside");
-                System.out.println("the content :" + new String(Files.readAllBytes(new File(p).toPath())));
+//                System.out.println("the content :" + new String(Files.readAllBytes(new File(p).toPath())));
                 JSONObject json = JSONObject.parseObject(new String(Files.readAllBytes(new File(p).toPath()), StandardCharsets.UTF_8),
                         Feature.OrderedField);
                 if(json == null)
