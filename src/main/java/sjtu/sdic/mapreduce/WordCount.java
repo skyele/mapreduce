@@ -18,23 +18,17 @@ import java.util.regex.Pattern;
 public class WordCount {
 
     public static List<KeyValue> mapFunc(String file, String value) {
-        System.out.println("in WordCount mapFunc");
-        System.out.println("the value " + value.substring(0,10));
         List<KeyValue> res = new LinkedList<>();
         Pattern pattern = Pattern.compile("([a-zA-Z0-9]+)");
         Matcher matcher = pattern.matcher(value);
         int count = matcher.groupCount();
         while(matcher.find()){
-            String tmp = matcher.group();
-            System.out.println(tmp);
-            res.add(new KeyValue(tmp, "1"));
+            res.add(new KeyValue(matcher.group(), "1"));
         }
         return res;
     }
 
     public static String reduceFunc(String key, String[] values) {
-        System.out.println("in WordCount reduceFunc");
-        System.out.println("the key " + key);
         int count = 0;
         for(String s : values){
             count += Integer.valueOf(s);
