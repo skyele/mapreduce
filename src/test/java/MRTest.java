@@ -82,7 +82,6 @@ public class MRTest {
         List<String> lines = new ArrayList<>();
         for (String f : files) {
             try {
-                System.out.println("the f: " + f);
                 lines.addAll(Files.readAllLines(new File(f).toPath()));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -94,13 +93,10 @@ public class MRTest {
         File output = new File("mrtmp.test");
         int i = 0;
         try (BufferedReader br = Files.newBufferedReader(output.toPath())){
-            System.out.println("the output br " + output.toPath());
             String text;
             while ((text = br.readLine()) != null) {
                 int v1 = Integer.valueOf(text.split(":")[0]);
                 int v2 = Integer.valueOf(lines.get(i).split(":")[0]);
-                System.out.println("text: " + text + " the lines.get(i): " + lines.get(i));
-                System.out.println("the v1: " + v1 + " the v2: " + v2);
                 TestCase.assertFalse(String.format("line %d: %d != %d", i, v1, v2),v1 != v2);
                 i++;
             }
