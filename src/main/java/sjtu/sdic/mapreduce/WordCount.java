@@ -7,6 +7,7 @@ import sjtu.sdic.mapreduce.core.Worker;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,11 +18,28 @@ import java.util.regex.Pattern;
 public class WordCount {
 
     public static List<KeyValue> mapFunc(String file, String value) {
-        return null;
+        System.out.println("in WordCount mapFunc");
+        System.out.println("the value " + value.substring(0,10));
+        List<KeyValue> res = new LinkedList<>();
+        Pattern pattern = Pattern.compile("([a-zA-Z0-9]+)");
+        Matcher matcher = pattern.matcher(value);
+        int count = matcher.groupCount();
+        while(matcher.find()){
+            String tmp = matcher.group();
+            System.out.println(tmp);
+            res.add(new KeyValue(tmp, "1"));
+        }
+        return res;
     }
 
     public static String reduceFunc(String key, String[] values) {
-        return null;
+        System.out.println("in WordCount reduceFunc");
+        System.out.println("the key " + key);
+        int count = 0;
+        for(String s : values){
+            count += Integer.valueOf(s);
+        }
+        return String.valueOf(count);
     }
 
     public static void main(String[] args) {

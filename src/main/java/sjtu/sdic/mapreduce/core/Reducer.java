@@ -61,10 +61,16 @@ public class Reducer {
      */
     public static void doReduce(String jobName, int reduceTask, String outFile, int nMap, ReduceFunc reduceF) throws IOException {
         Map<String, List<String>> keyValueMap = new HashMap<>();
+        System.out.println("in doReduce");
+        System.out.println("the reduceTask " + reduceTask + " nMap " + nMap);
         for(int i = 0; i < nMap; i++){
             String fileName = Utils.reduceName(jobName, i, reduceTask);
             String content = Utils.readFile(fileName);
+            System.out.println("the filename "+ fileName);
+            System.out.println("the content " + content);
             List<KeyValue> keyValueList = JSONArray.parseArray(content, KeyValue.class);
+            if(keyValueList == null)
+                continue;
             for(KeyValue keyValue : keyValueList){
                 if(keyValueMap.get(keyValue.key) == null)
                     keyValueMap.put(keyValue.key, new LinkedList<>());

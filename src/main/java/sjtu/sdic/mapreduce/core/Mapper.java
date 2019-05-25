@@ -68,8 +68,8 @@ public class Mapper {
      * @param mapF the user-defined map function
      */
     public static void doMap(String jobName, int mapTask, String inFile, int nReduce, MapFunc mapF) throws IOException {
-//        JSONObject.parseObject(new String(Files.readAllBytes(new File(p).toPath()), StandardCharsets.UTF_8),
-//                Feature.OrderedField);
+        System.out.println("in doMap");
+        System.out.println("the mapTask " + mapTask + " nReduce " + nReduce);
         String content = Utils.readFile(inFile);
         List<KeyValue> keyValueList = mapF.map(inFile, content);
         List<String> reducerFileNames = new LinkedList<>();
@@ -78,6 +78,10 @@ public class Mapper {
         for(int r = 0; r < nReduce; r++){
             String interFileName = Utils.reduceName(jobName, mapTask, r); //intermediate file per reduce task
             reducerFileNames.add(interFileName);
+            System.out.println("the interFilename " + interFileName);
+            File file = new File(interFileName);
+            if(!file.exists())
+                file.createNewFile();
         }
 
         for(KeyValue keyValue : keyValueList){
