@@ -44,39 +44,3 @@ public class Utils {
         return "mrtmp." + jobName + "-res-" + reduceTask;
     }
 }
-
-
-
-//        try
-//        {
-//            String encoding = "UTF-8";
-//            File file = new File(fileName);
-//            if (file.isFile() && file.exists())
-//            { // 判断文件是否存在
-//                InputStreamReader read = new InputStreamReader(
-//                        new FileInputStream(file), encoding);// 考虑到编码格式
-//                BufferedReader bufferedReader = new BufferedReader(read);
-//                StringBuffer buffer = new StringBuffer();
-//                String lineTxt = null;
-//
-//                while ((lineTxt = bufferedReader.readLine()) != null)
-//                {
-//                    buffer.append(lineTxt);
-//                    buffer.append("\n");
-//                }
-//                bufferedReader.close();
-//                read.close();
-//                return buffer.toString();
-//            }
-//            else
-//            {
-//                System.out.println("找不到指定的文件");
-//                throw new IOException("找不到指定的文件");
-//            }
-//        }
-//        catch (Exception e)
-//        {
-//            System.out.println("读取文件内容出错");
-//            e.printStackTrace();
-//        }
-//        return "";
