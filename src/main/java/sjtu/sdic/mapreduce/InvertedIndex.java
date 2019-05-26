@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Created by Cachhe on 2019/4/24.
@@ -16,11 +17,34 @@ import java.util.regex.Pattern;
 public class InvertedIndex {
 
     public static List<KeyValue> mapFunc(String file, String value) {
-        return null;
+        System.out.println("the file name " + file);
+        List<KeyValue> res = new LinkedList<>();
+        Pattern pattern = Pattern.compile("([a-zA-Z0-9]+)");
+        Matcher matcher = pattern.matcher(value);
+        while(matcher.find()){
+            res.add(new KeyValue(matcher.group(), "1 " + file));
+        }
+        return res;
     }
 
     public static String reduceFunc(String key, String[] values) {
-        return null;
+        int count = 0;
+        List<String> allFiles = new LinkedList<>();
+        for(String s : values){
+            String fileNames = s.split(" ")[1];
+            ArrayList<String> arrayList = new ArrayList<String>(Arrays.asList(fileNames.split(",")));
+            allFiles.addAll(arrayList);
+        }
+        allFiles= allFiles.stream().distinct().collect(Collectors.toList());
+        Collections.sort(allFiles);
+        String res = allFiles.size() + " ";
+        for(int i = 0; i < allFiles.size(); i++){
+            if(i == allFiles.size()-1)
+                res += allFiles.get(i);
+            else
+                res += allFiles.get(i)+",";
+        }
+        return res;
     }
 
     public static void main(String[] args) {

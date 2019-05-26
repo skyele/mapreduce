@@ -21,7 +21,6 @@ public class WordCount {
         List<KeyValue> res = new LinkedList<>();
         Pattern pattern = Pattern.compile("([a-zA-Z0-9]+)");
         Matcher matcher = pattern.matcher(value);
-        int count = matcher.groupCount();
         while(matcher.find()){
             res.add(new KeyValue(matcher.group(), "1"));
         }
