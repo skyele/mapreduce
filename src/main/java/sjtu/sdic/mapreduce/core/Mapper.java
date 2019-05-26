@@ -68,7 +68,7 @@ public class Mapper {
      * @param mapF the user-defined map function
      */
     public static void doMap(String jobName, int mapTask, String inFile, int nReduce, MapFunc mapF) throws IOException {
-        String content = Utils.readFile(inFile);
+        String content = readFile(inFile);
         List<KeyValue> keyValueList = mapF.map(inFile, content);
         List<String> reducerFileNames = new LinkedList<>();
         Map<String, List<KeyValue>> fileOfKeyValueMap = new HashMap<>();
@@ -105,5 +105,20 @@ public class Mapper {
      */
     private static int hashCode(String src) {
         return src.hashCode() & Integer.MAX_VALUE;
+    }
+
+    public static String readFile(String fileName) throws IOException {
+        return new String(Files.readAllBytes(new File(fileName).toPath()), StandardCharsets.UTF_8);
+    }
+
+    public static void writeFile(String fileName, String content) throws IOException {
+        File file = new File(fileName);
+        if(!file.exists()){
+            file.createNewFile();
+        }
+        FileOutputStream fos = new FileOutputStream(fileName);
+        OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
+        osw.write(content);
+        osw.flush();
     }
 }

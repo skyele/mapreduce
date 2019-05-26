@@ -10,7 +10,9 @@ import sjtu.sdic.mapreduce.common.KeyValue;
 import sjtu.sdic.mapreduce.common.Utils;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -63,7 +65,7 @@ public class Reducer {
         Map<String, List<String>> keyValueMap = new HashMap<>();
         for(int i = 0; i < nMap; i++){
             String fileName = Utils.reduceName(jobName, i, reduceTask);
-            String content = Utils.readFile(fileName);
+            String content = readFile(fileName);
             List<KeyValue> keyValueList = JSONArray.parseArray(content, KeyValue.class);
             if(keyValueList == null)
                 continue;
@@ -91,6 +93,21 @@ public class Reducer {
             count ++;
         }
         contentToFile += "}";
-        Utils.writeFile(outFile, contentToFile);
+        writeFile(outFile, contentToFile);
+    }
+
+    public static String readFile(String fileName) throws IOException {
+        return new String(Files.readAllBytes(new File(fileName).toPath()), StandardCharsets.UTF_8);
+    }
+
+    public static void writeFile(String fileName, String content) throws IOException {
+        File file = new File(fileName);
+        if(!file.exists()){
+            file.createNewFile();
+        }
+        FileOutputStream fos = new FileOutputStream(fileName);
+        OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
+        osw.write(content);
+        osw.flush();
     }
 }
