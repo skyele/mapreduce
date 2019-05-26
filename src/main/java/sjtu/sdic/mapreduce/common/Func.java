@@ -15,5 +15,5 @@ public interface Func<R, T> {
      * @param t argument
      * @return result of this function
      */
-    R func(T t) throws IOException;
+    R func(T t) throws IOException, InterruptedException;
 }

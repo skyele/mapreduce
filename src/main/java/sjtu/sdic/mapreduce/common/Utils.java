@@ -49,6 +49,10 @@ public class Utils {
     }
 
     public static void writeFile(String fileName, String content) throws IOException {
+        File file = new File(fileName);
+        if(!file.exists()){
+            file.createNewFile();
+        }
         FileOutputStream fos = new FileOutputStream(fileName);
         OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
         osw.write(content);

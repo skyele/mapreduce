@@ -101,6 +101,8 @@ public class Master implements MasterRpcService {
             } catch (IOException e) {
                 System.out.println("exception in sequential");
                 e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }).start();
         return mr;
@@ -216,6 +218,8 @@ public class Master implements MasterRpcService {
             } catch (IOException e) {
                 System.out.println("exception in distributed");
                 e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         });
         run.setDaemon(true);
@@ -242,7 +246,7 @@ public class Master implements MasterRpcService {
      * @param schedule schedule function called to schedule map and reduce tasks
      * @param finish finish function called when all tasks are done
      */
-    public void run(String jobName, String[] files, int nReduce, Func<Void, JobPhase> schedule, Func<Void, Void> finish) throws IOException {
+    public void run(String jobName, String[] files, int nReduce, Func<Void, JobPhase> schedule, Func<Void, Void> finish) throws IOException, InterruptedException {
         this.jobName = jobName;
         this.files = files;
         this.nReduce = nReduce;
